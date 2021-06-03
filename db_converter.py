@@ -1,11 +1,11 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
 Fixes a MySQL dump made with the right format so it can be directly
 imported to a new PostgreSQL database.
 
 Dump using:
-mysqldump --compatible=postgresql --default-character-set=utf8 -r databasename.mysql -u root databasename
 mysqldump --opt --compatible=postgresql --default-character-set=utf8 -d databasename -r dumpfile.sql -u root -p
 """
 
@@ -69,9 +69,7 @@ def parse(input_filename, output_filename):
         ))
         logging.flush()
         # line = line.decode("utf8").strip().replace(r"\\", "WUBWUBREALSLASHWUB").replace(r"\'", "''").replace("WUBWUBREALSLASHWUB", r"\\")
-        line = line.encode('utf-8').decode('utf8').strip().replace(r"\\", "WUBWUBREALSLASHWUB").replace(r"\'",
-                                                                                                        "''").replace(
-            "WUBWUBREALSLASHWUB", r"\\")
+        line = line.encode('utf-8').decode('utf8').strip().replace(r"\\", "WUBWUBREALSLASHWUB").replace(r"\'", "''").replace("WUBWUBREALSLASHWUB", r"\\")
         # Ignore comment lines
         if line.startswith("--") or line.startswith("/*") or line.startswith("LOCK TABLES") or line.startswith(
                 "DROP TABLE") or line.startswith("UNLOCK TABLES") or not line:
@@ -162,7 +160,7 @@ def parse(input_filename, output_filename):
                 if final_type:
                     cast_lines.append(
                         "ALTER TABLE \"%s\" ALTER COLUMN \"%s\" DROP DEFAULT, ALTER COLUMN \"%s\" TYPE %s USING CAST(\"%s\" as %s)" % (
-                        current_table, name, name, final_type, name, final_type))
+                            current_table, name, name, final_type, name, final_type))
                 creation_lines.append('"%s" %s %s' % (name, type, extra))
                 tables[current_table]['columns'].append((name, type, extra))
             # Is it a constraint or something?
@@ -171,7 +169,7 @@ def parse(input_filename, output_filename):
                 primary_key = line.split("(")[1].split(")")[0].lower()
             elif line.startswith("KEY"):
                 index_lines.append("CREATE INDEX %s on \"%s\" (%s)" % (
-                line.split(" ")[1], current_table, line.split("(")[1].split(")")[0].lower()))
+                    line.split(" ")[1], current_table, line.split("(")[1].split(")")[0].lower()))
             # Is it the end of the table?
             elif line == ");" or line == ")":
                 output.write("CREATE TABLE \"%s\" (\n" % current_table)
