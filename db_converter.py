@@ -6,7 +6,8 @@ Fixes a MySQL dump made with the right format so it can be directly
 imported to a new PostgreSQL database.
 
 Dump using:
-mysqldump --opt --compatible=postgresql --default-character-set=utf8 -d databasename -r dumpfile.sql -u root -p
+mysqldump --compatible=postgresql --default-character-set=utf8 databasename -r databasename.mysql -u root
+mysqldump --opt --compatible=postgresql --default-character-set=utf8 -d databasename -r dumpfile.sql -u root
 """
 
 import re
