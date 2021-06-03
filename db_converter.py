@@ -186,6 +186,8 @@ def parse(input_filename, output_filename):
                 fulltext_key_lines.append(
                     "CREATE INDEX ON %s USING gin(to_tsvector('english', %s))" % (current_table, fulltext_keys))
 
+            elif line.startswith("zerofill"):
+                line=line.replace('zerofill', '')
             elif line.startswith("KEY"):
                 pass
             # Is it the end of the table?
