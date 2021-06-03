@@ -7,8 +7,8 @@ Fixes a MySQL dump made with the right format so it can be directly
 imported to a new PostgreSQL database.
 
 Dump using:
-mysqldump --compatible=postgresql --default-character-set=utf8 databasename -r databasename.mysql -u root
-mysqldump --opt --compatible=postgresql --default-character-set=utf8 -d databasename -r dumpfile.sql -u root
+mysqldump --compatible=postgresql --default-character-set=utf8 databasename -r databasename.mysql -u root -p
+mysqldump --opt --compatible=postgresql --default-character-set=utf8 -d databasename -r dumpfile.sql -u root -p
 """
 
 import re
@@ -107,6 +107,7 @@ def parse(input_filename, output_filename):
                     extra = ""
                 extra = re.sub("CHARACTER SET [\w\d]+\s*", "", extra.replace("unsigned", ""))
                 extra = re.sub("COLLATE [\w\d]+\s*", "", extra.replace("unsigned", ""))
+                extra = re.sub("zerofill", "", extra.replace("zerofill", ""))
                 if extra.find("COMMENT '") > -1:
                     pattern = re.compile("COMMENT '(.*)'")
                     comment_line.append(
